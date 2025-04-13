@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: data-cleanup
+spec:
+  schedule: "*/2 * * * *"  # Every 2 minutes
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: data-cleanup-pod
+        spec:
+          containers:
+            - name: cleanup
+              image: busybox
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Cleaning /data directory...";
+                  rm -rf /data/*;
+                  echo "Cleanup complete.";
+              volumeMounts:
+                - name: data-volume
+                  mountPath: /data
+          restartPolicy: OnFailure
+          volumes:
+            - name: data-volume
+              emptyDir: {}
+

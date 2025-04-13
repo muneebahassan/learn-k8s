@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: env-demo
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command: ["sh","-c","echo DB host is $DB_HOST and DB port is $DB_PORT && sleep 300"]
+    envFrom:
+      - configMapRef:
+          name: db-config

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: system-monitor
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: system-monitor
+  template:
+    metadata:
+      labels:
+        app: system-monitor
+    spec:
+      containers:
+        - name: monitor
+          image: busybox
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              while true; do
+                echo "=== $(date) ===";
+                echo "CPU and Memory Usage:";
+                top -bn1 | head -n 5;
+                echo "-------------";
+                sleep 30;
+              done
+          resources:
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
+          securityContext:
+            runAsUser: 0
+      restartPolicy: Always
+

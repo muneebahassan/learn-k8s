@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hello-job
+spec:
+  completions: 1        # Only one successful pod is needed
+  parallelism: 1        # Only one pod runs at a time
+  template:
+    metadata:
+      name: hello-pod
+    spec:
+      containers:
+        - name: hello
+          image: busybox
+          command: ["echo", "Hello World"]
+      restartPolicy: Never  # Important for Jobs – don't restart failed pods
+

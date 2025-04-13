@@ -1,0 +1,18 @@
+# pod-file.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: file-demo
+spec:
+  containers:
+    - name: busybox
+      image: busybox
+      command: ["sh", "-c", "cat /config/app.properties && sleep 300"]
+      volumeMounts:
+        - name: config-volume
+          mountPath: /config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: app-config
+
